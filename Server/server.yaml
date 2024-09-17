@@ -267,7 +267,8 @@ components:
         - PrizeWon
         - Refund
         - CoinInserted
-        - CreditChangedByAdmin
+        - CreditDepositByAdmin
+        - CreditWithdrawalByAdmin
       type: string
     DirectTransactionRequest:
       type: object
