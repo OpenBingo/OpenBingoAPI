@@ -249,6 +249,8 @@ components:
       type: string
     CaptureTransactionRequest:
       type: object
+      required:
+        - transactionId
       properties:
         transactionId:
           type: string
@@ -256,6 +258,8 @@ components:
       additionalProperties: false
     VoidTransactionRequest:
       type: object
+      required:
+        - transactionId
       properties:
         transactionId:
           type: string
@@ -272,6 +276,10 @@ components:
       type: string
     DirectTransactionRequest:
       type: object
+      required:
+        - amount
+        - userId
+        - gameClientId
       properties:
         directTransactionReason:
           $ref: '#/components/schemas/DirectTransactionReason'
