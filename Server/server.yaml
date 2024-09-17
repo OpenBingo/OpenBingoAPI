@@ -1,0 +1,316 @@
+openapi: 3.0.0
+info:
+  description: Partial API description of a server for Bingo operators
+  version: "1.0.0"
+  title: Open bingo API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths: 
+  /GameClient/RegisterGameClient:
+    post:
+      tags:
+        - GameClient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterGameClientRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RegisterGameClientRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RegisterGameClientRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+  /Transaction/Direct:
+    post:
+      tags:
+        - Transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectTransactionRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DirectTransactionRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DirectTransactionRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+  /Transaction/Reserve:
+    post:
+      tags:
+        - Transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReserveTransactionRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReserveTransactionRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReserveTransactionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ReserveTransactionResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReserveTransactionResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReserveTransactionResponse'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+  /Transaction/Capture:
+    put:
+      tags:
+        - Transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaptureTransactionRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CaptureTransactionRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CaptureTransactionRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+  /Transaction/Void:
+    put:
+      tags:
+        - Transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidTransactionRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VoidTransactionRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VoidTransactionRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    RegisterGameClientRequest:
+      type: object
+      required:
+        - gameClientId
+        - bingoHallId
+        - ipAddress
+        - terminalNumber
+      properties:
+        gameClientId:
+          type: string
+          nullable: false 
+        bingoHallId:
+          type: string
+        ipAddress:
+          type: string
+          nullable: false 
+          example: '10.0.0.36'
+        terminalNumber:
+          type: integer
+          format: int32
+          nullable: false
+          example: 14
+        gameName:
+          type: string
+          nullable: false
+          example: 'DataBingo2'
+        version:
+          type: string
+          nullable: true
+          example: '1.0'
+      additionalProperties: false
+    ReserveTransactionRequest:
+      type: object
+      required:
+        - amount
+        - userId
+        - gameClientId
+      properties:
+        transactionReason:
+          $ref: '#/components/schemas/TransactionReason'
+        amount:
+          type: number
+          format: double
+          example: 10
+        userId:
+          type: string
+          nullable: false
+        gameId:
+          type: string
+          nullable: true
+        gameClientId:
+          type: string
+          nullable: false
+        description:
+          type: string
+          nullable: true
+          example: '2 tickets for Databingo2'
+      additionalProperties: false
+    TransactionReason:
+      enum:
+        - PurchaseTickets
+        - Withdraw
+        - Deposit
+        - PrizeWon
+        - Refund
+        - CoinInserted
+        - CreditChangedByAdmin
+      type: string
+    CaptureTransactionRequest:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    VoidTransactionRequest:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    DirectTransactionReason:
+      enum:
+        - Deposit
+        - PrizeWon
+        - Refund
+        - CoinInserted
+        - CreditChangedByAdmin
+      type: string
+    DirectTransactionRequest:
+      type: object
+      properties:
+        directTransactionReason:
+          $ref: '#/components/schemas/DirectTransactionReason'
+        amount:
+          type: number
+          format: double
+        userId:
+          type: string
+          nullable: true
+        gameClientId:
+          type: string
+          nullable: true
+        gameId:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ReserveTransactionResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ErrorCode'
+        errorMessage:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ErrorCode:
+      enum:
+        - INVALID_USER_ID
+        - INVALID_GAME_CLIENT_ID
+        - INSUFFICIENT_FUNDS
+        - UNKNOWN_TRANSACTIONREASON
+        - INVALID_BINGO_HALL_ID
+        - PENDING_TRANSACTION_NOT_FOUND
