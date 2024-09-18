@@ -267,15 +267,14 @@ components:
       additionalProperties: false
     DirectTransactionReason:
       enum:
-        - Deposit
         - PrizeWon
-        - Refund
-        - CoinInserted
-        - CreditDepositByAdmin
-        - CreditWithdrawalByAdmin
       type: string
     DirectTransactionRequest:
       type: object
+      required:
+        - gameClientId
+        - amount
+        - userId
       properties:
         directTransactionReason:
           $ref: '#/components/schemas/DirectTransactionReason'
