@@ -275,6 +275,7 @@ components:
         - gameClientId
         - amount
         - userId
+        - transactionId
       properties:
         directTransactionReason:
           $ref: '#/components/schemas/DirectTransactionReason'
@@ -295,6 +296,9 @@ components:
           nullable: true
         isJackpot:
           type: boolean
+          nullable: true
+        transactionId:
+          type: string
           nullable: true
       additionalProperties: false
     ReserveTransactionResponse:
