@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  description: OpenBingoAPI clientside API
+  version: "1.0.0"
+  title: OpenBingoAPI clientside API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /SetCredit:
+    post:
+      summary: Updates credit on bingoclient
+      description: |
+        This is used to update the view on each gameclient where the customer is logged in when a change in credit happens on one of the clients, or when cash is deposited to the account. 
+        Use RequestId to discard duplicate requests.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetCreditOnGameClientRequest'
+        description: Set credit request
+      responses:
+        '200':
+          description: Updated credit ok on gameclient
+        '400':
+          description: bad input parameter
+  /Login:
+    post:
+      summary: Open the client for play and assign current customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Updated credit ok on gameclient
+        '400':
+          description: bad input parameter
+  /Logout:
+    post:
+      summary: Log the customer out and lock the machine. (Show QR code)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '200':
+          description: Updated credit ok on gameclient
+        '400':
+          description: bad input parameter
+components:
+  schemas:
+    SetCreditOnGameClientRequest:
+      type: object
+      required:
+        - GameClientId
+        - Credit
+        - RequestId
+      properties:
+        GameClientId:
+          type: string
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        Credit:
+          type: number
+          example: 100
+        RequestId:
+          type: string
+          example: 389b2816-6630-4a72-af39-2c53c7907e23
+        CustomerId:
+          type: string
+          example: f2a3ffa1-8449-4212-bbe5-718885e7aa26
+    LoginRequest:
+      type: object
+      required: 
+        - GameClientId
+        - Credit
+        - RequestId
+        - CustomerId
+        - CustomerName
+      properties:
+        GameClientId:
+          type: string
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        Credit:
+          type: number
+          example: 100
+        RequestId:
+          type: string
+          example: 389b2816-6630-4a72-af39-2c53c7907e23
+        CustomerId:
+          type: string
+          example: f2a3ffa1-8449-4212-bbe5-718885e7aa26
+        CustomerName:
+          type: string
+          example: 'Peter Griffin'
+    LogoutRequest:
+      type: object
+      required: 
+        - GameClientId
+        - RequestId
+      properties:
+        RequestId:
+          type: string
+          example: 389b2816-6630-4a72-af39-2c53c7907e23
+        GameClientId:
+          type: string
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          
